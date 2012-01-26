@@ -43,13 +43,11 @@ class Tree {
 
 
     //make a bunch of grass
-    for (i=0;i<_numGrass;i++) 
+    for (int i=0;i<_numGrass;i++) 
       grasses[i] = new Grass(random(0, width), random(5, 25));
-  }
+    }
 
   void update() {
-
-
 
     //redraw the trunk 
     int w = 83;

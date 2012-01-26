@@ -3,7 +3,7 @@ class Elevator {
   float _x, _startX, floorY;
   int numFloors = 26;
   PImage trunk;
-  int ease = 5;
+  int ease = 40;
 
   ElevatorFloor[] elevatorFloors = new ElevatorFloor[numFloors];
 

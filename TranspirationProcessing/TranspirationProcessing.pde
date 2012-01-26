@@ -9,15 +9,16 @@ int blurSpeed = 1;
 int blurCnt = 0;
 //int numElevators = 1;
 Tree tree;
-long _time = 0;
+//long _time = 0;
 long _lastTime = 0;
 long _nextEventTime = 0;
 long _startTime = 0;
-
+long _timeOffset;
 
 void setup() {
+
   size(960, 600);
-frame.setBackground(new java.awt.Color(0, 0, 0));
+ frame.setBackground(new java.awt.Color(0, 0, 0));
 //load the data
   events = loadStrings("data3.txt");
   println(events);
@@ -35,13 +36,24 @@ frame.setBackground(new java.awt.Color(0, 0, 0));
       println(e);
     };
     
+    Date d = new Date();
+    long _currentTime = d.getTime(); 
+    
+    //set the time offset
+    _timeOffset = _currentTime - _startTime;
+    println(i);
+
 }
 
 void draw() {
+        println(i);
+
   blurCnt++;
-  _time = millis();
-  _time *= 1000;
-  _time += _startTime;
+  //_time = millis();
+  //_time *= 1000;
+  //_time += _startTime;
+Date d = new Date();
+long _currentTime = d.getTime();///1000; 
 
   
   /*if (blurCnt == blurSpeed) {
@@ -69,13 +81,19 @@ void draw() {
     try {
       int elevator = event.getInt("elevator");
      
-      println("current event time:"+_nextEventTime);
-      println("time passed:       "+_time);
-     
+      println("offset event time : " + _nextEventTime);
+      println("current time      : " + _currentTime);
+      println("event time        : " + (_nextEventTime - _timeOffset));
 
-     // if (_time >= _nextEventTime) {
-        println("time >= _time)");
-          _nextEventTime = event.getLong("timestamp");
+
+     // println("time passed:       " + _time);
+     
+    // _nextEventTime = event.getLong("timestamp") + _timeOffset;
+
+
+     if (_currentTime >= _nextEventTime) {
+     //   println("time >= _time)");
+          _nextEventTime = event.getLong("timestamp") + _timeOffset;
            
       //  _lastTime = time;
         //only execute the event if we are past the event time
@@ -95,8 +113,9 @@ void draw() {
           tree.setPeople(elevator, event.getBoolean("people"));
         }
         //iterate to the next event
-        
-     // }
+            i++;
+
+      }
       
     }
     catch (JSONException e) {
@@ -105,9 +124,9 @@ void draw() {
     };
     
     tree.update();
-    i++;
   }
   else{
+    //loop back to start of file
    i = 0; 
   }
 
