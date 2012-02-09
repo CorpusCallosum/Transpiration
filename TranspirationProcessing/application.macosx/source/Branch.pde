@@ -124,16 +124,16 @@ class Branch {
     if (growthTarget < growthMax) {
       growthTarget += growthRate;
       curlLength += growthRate/100;
-      curlx += growthRate/10;
-      curly += growthRate/10;
+      curlx += growthRate/20;
+      curly += growthRate/20;
     }
   }
 
   void shrink() {
     growthTarget -= growthRate;
     curlLength -= growthRate/100;
-    curlx -= growthRate/10;
-    curly -= growthRate/10;
+    curlx -= growthRate/20;
+    curly -= growthRate/20;
   }
   
   void setWind(float wind){

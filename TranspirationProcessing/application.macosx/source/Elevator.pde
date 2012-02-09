@@ -3,7 +3,7 @@ class Elevator {
   float _x, _startX, floorY;
   int numFloors = 26;
   PImage trunk;
-  int ease = 5;
+  int ease = 40;
 
   ElevatorFloor[] elevatorFloors = new ElevatorFloor[numFloors];
 
@@ -39,7 +39,9 @@ class Elevator {
   }
 
   void setFloor(int eFloor) {
-    _currentFloor = eFloor;
+    //if(abs(eFloor - _currentFloor) == 1){
+      _currentFloor = eFloor;
+   // }
   }
 
   void setPeople(Boolean p) {
@@ -54,9 +56,14 @@ class Elevator {
   }
 
   float getFloorY(float fl) {
+    //LINEAR
   //  float y = height - (fl/numFloors * height);
     
+    //EXPONENTIAL
     float y = height - sqrt(fl/numFloors) *height;
+    
+    //LOGARITHMIC
+  //  float y = height - log(fl/numFloors) *height;
     
     return y;
   }

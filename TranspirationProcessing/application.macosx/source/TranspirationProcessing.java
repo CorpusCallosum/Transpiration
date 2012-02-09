@@ -2,6 +2,8 @@ import processing.core.*;
 import processing.xml.*; 
 
 import org.json.*; 
+import oscP5.*; 
+import netP5.*; 
 
 import java.applet.*; 
 import java.awt.Dimension; 
@@ -17,7 +19,7 @@ import java.util.*;
 import java.util.zip.*; 
 import java.util.regex.*; 
 
-public class Transpiration extends PApplet {
+public class TranspirationProcessing extends PApplet {
 
 
 
@@ -30,24 +32,64 @@ int blurSpeed = 1;
 int blurCnt = 0;
 //int numElevators = 1;
 Tree tree;
-long _time = 0;
+//long _time = 0;
 long _lastTime = 0;
 long _nextEventTime = 0;
 long _startTime = 0;
+long _timeOffset;
+
+
+
+
+
+
+OscP5 oscP5;
+
+public void oscEvent(OscMessage msg) {
+  if (msg.addrPattern().equals("/elevator/floor")) {
+    int elevator = msg.get(0).intValue();
+    int floorNumber = msg.get(1).intValue();
+    println("Elevator "+elevator+" is now on floor "+floorNumber);
+    tree.setFloor(elevator, floorNumber);
+  } else if (msg.addrPattern().equals("/elevator/people")) {
+    int elevator = msg.get(0).intValue();
+    int people = msg.get(1).intValue();
+    if (people == 0) {
+      println("Elevator "+elevator+" is empty");
+      tree.setPeople(elevator, false);
+    } else {
+      println("Elevator "+elevator+" is occupied");
+      tree.setPeople(elevator, true);
+    }
+  }
+}
+
 
 
 public void setup() {
-  size(960, 600);
-frame.setBackground(new java.awt.Color(0, 0, 0));
-//load the data
-  events = loadStrings("data3.txt");
-  println(events);
+  
+  
+  
+  oscP5 = new OscP5(this, 10240);
+  
+  
 
+  size(960, 600);
+ frame.setBackground(new java.awt.Color(0, 0, 0));
+
+
+
+
+//load the data
+ // events = loadStrings("data3.txt");
+ // println(events);
+
+//Create the Tree object
   tree = new Tree(width*.5f);
   background(0);
   
   //get first time stamp
-  try {
+  /*try {
       event = new JSONObject(events[0]);
        _startTime = event.getLong("timestamp");
     }
@@ -56,13 +98,25 @@ frame.setBackground(new java.awt.Color(0, 0, 0));
       println(e);
     };
     
+    Date d = new Date();
+    long _currentTime = d.getTime(); 
+    
+    //set the time offset
+    _timeOffset = _currentTime - _startTime;
+    println(i);
+    */
+
 }
 
 public void draw() {
-  blurCnt++;
-  _time = millis();
-  _time *= 1000;
-  _time += _startTime;
+      //  println(i);
+
+ // blurCnt++;
+  //_time = millis();
+  //_time *= 1000;
+  //_time += _startTime;
+//Date d = new Date();
+//long _currentTime = d.getTime();///1000; 
 
   
   /*if (blurCnt == blurSpeed) {
@@ -72,7 +126,7 @@ public void draw() {
    tint(255,100);
    colorMode(RGB);
    }*/
-
+/*
   //loop through all the data points
   //update all the elevators
 
@@ -90,13 +144,19 @@ public void draw() {
     try {
       int elevator = event.getInt("elevator");
      
-      println("current event time:"+_nextEventTime);
-      println("time passed:       "+_time);
-     
+      println("offset event time : " + _nextEventTime);
+      println("current time      : " + _currentTime);
+      println("event time        : " + (_nextEventTime - _timeOffset));
 
-     // if (_time >= _nextEventTime) {
-        println("time >= _time)");
-          _nextEventTime = event.getLong("timestamp");
+
+     // println("time passed:       " + _time);
+     
+    // _nextEventTime = event.getLong("timestamp") + _timeOffset;
+
+
+     if (_currentTime >= _nextEventTime) {
+     //   println("time >= _time)");
+          _nextEventTime = event.getLong("timestamp") + _timeOffset;
            
       //  _lastTime = time;
         //only execute the event if we are past the event time
@@ -116,8 +176,9 @@ public void draw() {
           tree.setPeople(elevator, event.getBoolean("people"));
         }
         //iterate to the next event
-        
-     // }
+            i++;
+
+      }
       
     }
     catch (JSONException e) {
@@ -126,25 +187,28 @@ public void draw() {
     };
     
     tree.update();
-    i++;
   }
   else{
+    //loop back to start of file
    i = 0; 
   }
-
+*/
+  tree.update();
+  
   stroke(0);
   fill(0, 50);
   rect(0, 0, width, height);
-  blurCnt++;
+//  blurCnt++;
 }
 
-public void sat() {
+/*
+void sat() {
   colorMode(HSB);
   for (int i = 0; i< width*height;i++) {
     pixels[i] = color(hue(pixels[i]), saturation(pixels[i])-10, brightness(pixels[i]));
   }
   colorMode(RGB);
-}
+}*/
 
 class Branch {
   //subclass instantiated by Elevator for each floor
@@ -272,16 +336,16 @@ class Branch {
     if (growthTarget < growthMax) {
       growthTarget += growthRate;
       curlLength += growthRate/100;
-      curlx += growthRate/10;
-      curly += growthRate/10;
+      curlx += growthRate/20;
+      curly += growthRate/20;
     }
   }
 
   public void shrink() {
     growthTarget -= growthRate;
     curlLength -= growthRate/100;
-    curlx -= growthRate/10;
-    curly -= growthRate/10;
+    curlx -= growthRate/20;
+    curly -= growthRate/20;
   }
   
   public void setWind(float wind){
@@ -294,7 +358,7 @@ class Elevator {
   float _x, _startX, floorY;
   int numFloors = 26;
   PImage trunk;
-  int ease = 5;
+  int ease = 40;
 
   ElevatorFloor[] elevatorFloors = new ElevatorFloor[numFloors];
 
@@ -330,7 +394,9 @@ class Elevator {
   }
 
   public void setFloor(int eFloor) {
-    _currentFloor = eFloor;
+    //if(abs(eFloor - _currentFloor) == 1){
+      _currentFloor = eFloor;
+   // }
   }
 
   public void setPeople(Boolean p) {
@@ -345,9 +411,14 @@ class Elevator {
   }
 
   public float getFloorY(float fl) {
+    //LINEAR
   //  float y = height - (fl/numFloors * height);
     
+    //EXPONENTIAL
     float y = height - sqrt(fl/numFloors) *height;
+    
+    //LOGARITHMIC
+  //  float y = height - log(fl/numFloors) *height;
     
     return y;
   }
@@ -459,17 +530,15 @@ class Tree {
     }
 
     trunk = loadImage("tree.png");
-    _bg = loadImage("Tree_Scene_Frame_v03.png");
+    _bg = loadImage("Tree_Scene_Frame_v04.png");
 
 
     //make a bunch of grass
-    for (i=0;i<_numGrass;i++) 
+    for (int i=0;i<_numGrass;i++) 
       grasses[i] = new Grass(random(0, width), random(5, 25));
-  }
+    }
 
   public void update() {
-
-
 
     //redraw the trunk 
     int w = 83;
@@ -524,18 +593,28 @@ class Tree {
     }
   }
 
-  public float getFloorY(float fl) {
-    //  float y = height - (fl/numFloors * height);
-
+ public float getFloorY(float fl) {
+    //LINEAR
+   // float y = height - (fl/numFloors * height);
+    
+    //EXPONENTIAL
     float y = height - sqrt(fl/numFloors) *height;
+    
+    //LOGARITHMIC
+    // natural logarithm
+/*float exponent = log(fl/numFloors);
 
-    //println("y: ");
-    //println(y);
+// reverse natural logarithm - "antilog"
+float check = pow((float)Math.E, exponent);
+println("pow (E, exponent)  = " + check);
+    
+    float y = height - check *height;*/
+    
     return y;
   }
 }
 
   static public void main(String args[]) {
-    PApplet.main(new String[] { "--present", "--bgcolor=#666666", "--hide-stop", "Transpiration" });
+    PApplet.main(new String[] { "--present", "--bgcolor=#666666", "--hide-stop", "TranspirationProcessing" });
   }
 }

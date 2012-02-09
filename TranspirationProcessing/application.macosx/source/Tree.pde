@@ -39,17 +39,15 @@ class Tree {
     }
 
     trunk = loadImage("tree.png");
-    _bg = loadImage("Tree_Scene_Frame_v03.png");
+    _bg = loadImage("Tree_Scene_Frame_v04.png");
 
 
     //make a bunch of grass
-    for (i=0;i<_numGrass;i++) 
+    for (int i=0;i<_numGrass;i++) 
       grasses[i] = new Grass(random(0, width), random(5, 25));
-  }
+    }
 
   void update() {
-
-
 
     //redraw the trunk 
     int w = 83;
@@ -104,13 +102,23 @@ class Tree {
     }
   }
 
-  float getFloorY(float fl) {
-    //  float y = height - (fl/numFloors * height);
-
+ float getFloorY(float fl) {
+    //LINEAR
+   // float y = height - (fl/numFloors * height);
+    
+    //EXPONENTIAL
     float y = height - sqrt(fl/numFloors) *height;
+    
+    //LOGARITHMIC
+    // natural logarithm
+/*float exponent = log(fl/numFloors);
 
-    //println("y: ");
-    //println(y);
+// reverse natural logarithm - "antilog"
+float check = pow((float)Math.E, exponent);
+println("pow (E, exponent)  = " + check);
+    
+    float y = height - check *height;*/
+    
     return y;
   }
 }

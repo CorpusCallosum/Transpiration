@@ -3,7 +3,7 @@
 <plist version="0.9">
   <dict>
     <key>CFBundleName</key>
-    <string>Transpiration</string>
+    <string>TranspirationProcessing</string>
     <key>CFBundleVersion</key>
     <string>1.0</string>
     <key>CFBundleAllowMixedLocalizations</key>
@@ -21,7 +21,7 @@
     <key>CFBundleIconFile</key>
     <string>sketch.icns</string>
     <key>CFBundleIdentifier</key> 
-    <string>Transpiration</string>
+    <string>TranspirationProcessing</string>
 
     <!-- http://developer.apple.com/documentation/MacOSX/Conceptual/BPRuntimeConfig/Articles/PListKeys.html#//apple_ref/doc/uid/20001431-113616 -->
     <key>LSUIPresentationMode</key>
@@ -41,7 +41,7 @@
       <key>VMOptions</key>
       <string> -Xms64m -Xmx1000m</string>
       <key>MainClass</key>
-      <string>Transpiration</string>
+      <string>TranspirationProcessing</string>
       <key>JVMVersion</key>
       <string>1.5*</string>
       <key>JVMArchs</key>
@@ -50,7 +50,7 @@
 	<string>ppc</string>
       </array>
       <key>ClassPath</key>
-      <string>$JAVAROOT/Transpiration.jar:$JAVAROOT/core.jar:$JAVAROOT/json.jar</string>
+      <string>$JAVAROOT/TranspirationProcessing.jar:$JAVAROOT/core.jar:$JAVAROOT/json.jar:$JAVAROOT/oscP5.jar</string>
 
       <!-- http://developer.apple.com/releasenotes/Java/java141/system_properties/chapter_4_section_1.html#//apple_ref/doc/uid/TP30000285 -->
       <key>Properties</key>
