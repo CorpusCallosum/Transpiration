@@ -1,8 +1,8 @@
-import org.json.*;
+//import org.json.*;
 
 //Elevator e1, e2, e3, e4;
 //Elevator[] elevators = new Elevator[4];
-JSONObject data, event;
+//JSONObject data, event;
 String[] events;
 int i = 0;
 int blurSpeed = 1;
