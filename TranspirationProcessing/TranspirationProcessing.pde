@@ -15,19 +15,58 @@ long _nextEventTime = 0;
 long _startTime = 0;
 long _timeOffset;
 
+
+
+import oscP5.*;
+import netP5.*;
+
+OscP5 oscP5;
+
+void oscEvent(OscMessage msg) {
+  if (msg.addrPattern().equals("/elevator/floor")) {
+    int elevator = msg.get(0).intValue();
+    int floorNumber = msg.get(1).intValue();
+    println("Elevator "+elevator+" is now on floor "+floorNumber);
+    tree.setFloor(elevator, floorNumber);
+  } else if (msg.addrPattern().equals("/elevator/people")) {
+    int elevator = msg.get(0).intValue();
+    int people = msg.get(1).intValue();
+    if (people == 0) {
+      println("Elevator "+elevator+" is empty");
+      tree.setPeople(elevator, false);
+    } else {
+      println("Elevator "+elevator+" is occupied");
+      tree.setPeople(elevator, true);
+    }
+  }
+}
+
+
+
 void setup() {
+  
+  
+  
+  oscP5 = new OscP5(this, 10240);
+  
+  
 
   size(960, 600);
  frame.setBackground(new java.awt.Color(0, 0, 0));
-//load the data
-  events = loadStrings("data3.txt");
-  println(events);
 
+
+
+
+//load the data
+ // events = loadStrings("data3.txt");
+ // println(events);
+
+//Create the Tree object
   tree = new Tree(width*.5);
   background(0);
   
   //get first time stamp
-  try {
+  /*try {
       event = new JSONObject(events[0]);
        _startTime = event.getLong("timestamp");
     }
@@ -42,18 +81,19 @@ void setup() {
     //set the time offset
     _timeOffset = _currentTime - _startTime;
     println(i);
+    */
 
 }
 
 void draw() {
-        println(i);
+      //  println(i);
 
-  blurCnt++;
+ // blurCnt++;
   //_time = millis();
   //_time *= 1000;
   //_time += _startTime;
-Date d = new Date();
-long _currentTime = d.getTime();///1000; 
+//Date d = new Date();
+//long _currentTime = d.getTime();///1000; 
 
   
   /*if (blurCnt == blurSpeed) {
@@ -63,7 +103,7 @@ long _currentTime = d.getTime();///1000;
    tint(255,100);
    colorMode(RGB);
    }*/
-
+/*
   //loop through all the data points
   //update all the elevators
 
@@ -129,18 +169,21 @@ long _currentTime = d.getTime();///1000;
     //loop back to start of file
    i = 0; 
   }
-
+*/
+  tree.update();
+  
   stroke(0);
   fill(0, 50);
   rect(0, 0, width, height);
-  blurCnt++;
+//  blurCnt++;
 }
 
+/*
 void sat() {
   colorMode(HSB);
   for (int i = 0; i< width*height;i++) {
     pixels[i] = color(hue(pixels[i]), saturation(pixels[i])-10, brightness(pixels[i]));
   }
   colorMode(RGB);
-}
+}*/
 
