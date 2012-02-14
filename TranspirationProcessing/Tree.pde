@@ -22,7 +22,6 @@ class Tree {
     _x = x;
 
     //instantiate 4 elevator objects
-    //create 4 "elevator" objects
     e1 = new Elevator(_x-6);  
     elevators[0] = e1;
     e2 = new Elevator(_x-2);
@@ -59,7 +58,7 @@ class Tree {
      image(trunk, _startX-350, 0, w, height+50);*/
 
     //bg image
-    image(_bg, 0, 0);
+    image(_bg, 0, 0,width,height);
     //update the floors
     for (int i=0;i<numFloors;i++) {
 
@@ -67,7 +66,8 @@ class Tree {
       elevatorFloors[i].update(_wind+windVariety);
     }
 
-    image(trunk, _x-w/2-5, 0, w, 600);
+    
+    image(trunk, _x-w/2-5, 0, w, height);
 
 
     //***DRAW ELEVATORS
