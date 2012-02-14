@@ -13,7 +13,7 @@ import netP5.*;
 
 OscP5 oscP5;
 
-//setup vars
+//set resolution
 int w = 1550;
 int h = 720;
 //int w = 1280;
