@@ -118,6 +118,7 @@ class Branch {
   float f; 
   float deley = 10; 
   float growth = 0; 
+  //START BRANCH LENGTH
   float growthTarget = 10;
   int branch, _fl, _cnt;
   float _x, _y, curlLength, _dir;
@@ -128,7 +129,6 @@ class Branch {
   int _c2 = 255;
   int _c3 = 255;
 
-
   Branch(int fl, float x, float y) {
     //constructor
     _fl = fl;
@@ -136,8 +136,6 @@ class Branch {
     _y = y;
 
     //decide branch direction
-
-
     float r = 0;
 
     if (fl%2 == 0) {
@@ -160,7 +158,7 @@ class Branch {
   //  stroke(_c1);
    // colorMode(HSB);
    
-    strokeWeight(1);
+    strokeWeight(1.5f);
     fill(255, 255, 255, 50);
     //curlx += (radians(360.f/height*mouseX)-curlx)/deley;
     //curly += (radians(360.f/height*mouseY)-curly)/deley;
@@ -187,7 +185,7 @@ class Branch {
     stroke(_c1,_c2,_c3);
     //  stroke(0, 150, 0, 90);
     // println("branch");
-    len = len*f*1.25f; 
+    len = len*f*1.35f; 
     num -= 1; 
     if ((len > _detail) && (num > 0)) 
     { 
