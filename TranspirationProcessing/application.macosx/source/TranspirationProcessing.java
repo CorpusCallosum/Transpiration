@@ -421,8 +421,8 @@ class Tree {
       elevatorFloors[i] = new ElevatorFloor(i, _x, numFloors, floorY);
     }
 
-    trunk = loadImage("tree.png");
-    _bg = loadImage("Tree_Scene_Frame_v04.png");
+    trunk = loadImage("images/hires/tree.png");
+    _bg = loadImage("images/hires/Trees_NoCenter.jpg");
 
 
     //make a bunch of grass
@@ -433,7 +433,7 @@ class Tree {
   public void update() {
 
     //redraw the trunk 
-    int w = 83;
+    int w = 146;
 
     /* image(trunk, _startX-200, 0, w, height+50);
      image(trunk, _startX-400, 0, w, height+50);
@@ -451,7 +451,7 @@ class Tree {
     }
 
     
-    image(trunk, _x-w/2-5, 0, w, height);
+    image(trunk, _x-w/2-7, 0);
 
 
     //***DRAW ELEVATORS
