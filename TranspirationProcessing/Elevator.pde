@@ -29,12 +29,12 @@ class Elevator {
   //  println("set floor");
    // stroke(255,126,0);
    // fill(25, 50);
-    strokeWeight(3);
+    strokeWeight(5);
     float jit = .25;
     float nextX = _startX;// + random(-jit, jit);
     float yTarget = getFloorY(_currentFloor);
     floorY += (yTarget - floorY)/ease;
-    line(_x, floorY, nextX, floorY-10);
+    line(_x, floorY, nextX, floorY-15);
     _x = nextX;
   }
 

@@ -43,6 +43,8 @@ void oscEvent(OscMessage msg) {
 
 void setup() {
   
+  noCursor();
+  
   oscP5 = new OscP5(this, 10240);
   
   size(w, h);

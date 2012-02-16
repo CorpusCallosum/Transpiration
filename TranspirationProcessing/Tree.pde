@@ -22,13 +22,13 @@ class Tree {
     _x = x;
 
     //instantiate 4 elevator objects
-    e1 = new Elevator(_x-6);  
+    e1 = new Elevator(_x-12);  
     elevators[0] = e1;
-    e2 = new Elevator(_x-2);
+    e2 = new Elevator(_x-4);
     elevators[1] = e2;
-    e3 = new Elevator(_x+2);
+    e3 = new Elevator(_x+4);
     elevators[2] = e3;
-    e4 = new Elevator(_x+6);
+    e4 = new Elevator(_x+12);
     elevators[3] = e4;
 
     //instantiate the floor objects
@@ -37,8 +37,8 @@ class Tree {
       elevatorFloors[i] = new ElevatorFloor(i, _x, numFloors, floorY);
     }
 
-    trunk = loadImage("images/hires/tree.png");
-    _bg = loadImage("images/hires/Trees_NoCenter.jpg");
+    trunk = loadImage("images/hires/Just_Tree_wider.png");
+    _bg = loadImage("images/hires/Tree_widerResolution.jpg");
 
 
     //make a bunch of grass
@@ -67,7 +67,7 @@ class Tree {
     }
 
     
-    image(trunk, _x-w/2-7, 0);
+    image(trunk, _x-w/2, 0);
 
 
     //***DRAW ELEVATORS
