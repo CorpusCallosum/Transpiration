@@ -8,17 +8,20 @@ class Branch {
   //_len = len;
   //_num = num;
 
+ //START BRANCH LENGTH
+  float growthTarget = 10;
+  float growthMax = 11.5;
+
+
   float curlx = 0; 
   float curly = 0; 
   float f; 
   float deley = 10; 
   float growth = 0; 
-  //START BRANCH LENGTH
-  float growthTarget = 10;
+ 
   int branch, _fl, _cnt;
   float _x, _y, curlLength, _dir;
   float growthRate = 1;
-  float growthMax = 12;
   int _detail = 2;
   int _c1 = 255;
   int _c2 = 255;
