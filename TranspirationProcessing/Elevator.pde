@@ -4,6 +4,8 @@ class Elevator {
   int numFloors = 26;
   PImage trunk;
   int ease = 40;
+  
+  boolean _hasMoved = false;
 
   ElevatorFloor[] elevatorFloors = new ElevatorFloor[numFloors];
 
@@ -25,10 +27,6 @@ class Elevator {
   void update() {
    
     //***DRAW ELEVATOR
-    //create jitter
-  //  println("set floor");
-   // stroke(255,126,0);
-   // fill(25, 50);
     strokeWeight(5);
     float jit = .25;
     float nextX = _startX;// + random(-jit, jit);
@@ -37,11 +35,17 @@ class Elevator {
     line(_x, floorY, nextX, floorY-15);
     _x = nextX;
   }
-
+  
   void setFloor(int eFloor) {
-    //if(abs(eFloor - _currentFloor) == 1){
-      _currentFloor = eFloor;
-   // }
+    if(_hasMoved){
+      if(abs(eFloor - _currentFloor) == 1){
+        _currentFloor = eFloor;
+      }
+    }
+    else{
+       _currentFloor = eFloor;
+       _hasMoved = true;
+    }
   }
 
   void setPeople(Boolean p) {
@@ -56,20 +60,19 @@ class Elevator {
   }
 
   float getFloorY(float fl) {
-    //LINEAR
-  //  float y = height - (fl/numFloors * height);
     
     //EXPONENTIAL
-    float y = height - sqrt(fl/numFloors) *height;
-    
-    //LOGARITHMIC
-  //  float y = height - log(fl/numFloors) *height;
-    
+    float y = height - sqrt(fl/numFloors) *height;    
     return y;
   }
   
   int getFloor(){
      return _currentFloor; 
   }
+  
+  boolean getHasMoved(){
+    return _hasMoved;  
+  }
+  
 }
 
