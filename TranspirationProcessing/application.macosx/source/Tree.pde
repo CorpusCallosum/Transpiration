@@ -51,17 +51,11 @@ class Tree {
     //redraw the trunk 
     int w = 146;
 
-    /* image(trunk, _startX-200, 0, w, height+50);
-     image(trunk, _startX-400, 0, w, height+50);
-     image(trunk, _startX-600, 0, w, height+50);
-     image(trunk, _startX-300, 0, w, height+50);
-     image(trunk, _startX-350, 0, w, height+50);*/
-
     //bg image
     image(_bg, 0, 0,width,height);
+    
     //update the floors
     for (int i=0;i<numFloors;i++) {
-
       float windVariety = random(-.01, .01)/10;
       elevatorFloors[i].update(_wind+windVariety);
     }
@@ -90,9 +84,7 @@ class Tree {
   }
 
   void setPeople(int e, Boolean p) {
-
     int fl = elevators[e-1].getFloor();
-
     if (p) {
       //people got on
       elevatorFloors[fl].getOn();
@@ -103,23 +95,18 @@ class Tree {
   }
 
  float getFloorY(float fl) {
-    //LINEAR
-   // float y = height - (fl/numFloors * height);
-    
     //EXPONENTIAL
     float y = height - sqrt(fl/numFloors) *height;
-    
-    //LOGARITHMIC
-    // natural logarithm
-/*float exponent = log(fl/numFloors);
-
-// reverse natural logarithm - "antilog"
-float check = pow((float)Math.E, exponent);
-println("pow (E, exponent)  = " + check);
-    
-    float y = height - check *height;*/
-    
     return y;
   }
+  
+  //reset to default values
+  void reset(){
+    //RESET ALL BRANCHES
+    for (int i=0;i<numFloors;i++) {
+      elevatorFloors[i].reset();
+    }
+  }
+  
 }
 

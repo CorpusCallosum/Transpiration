@@ -1,3 +1,6 @@
+//SETUP VARS
+int numFloors = 27;
+
 String[] events;
 int i = 0;
 int blurSpeed = 1;
@@ -22,17 +25,26 @@ int h = 720;
 //Send messages to tree
 void oscEvent(OscMessage msg) {
   if (msg.addrPattern().equals("/elevator/floor")) {
+     //FLOOR EVENT
     int elevator = msg.get(0).intValue();
     int floorNumber = msg.get(1).intValue();
     println("Elevator "+elevator+" is now on floor "+floorNumber);
-    tree.setFloor(elevator, floorNumber);
+    //ADD CONTROL FOR BAD ELEVATOR DATA
+    if(floorNumber >= 0 ){
+      if(floorNumber <= numFloors){
+        tree.setFloor(elevator, floorNumber);
+      }
+    }
   } else if (msg.addrPattern().equals("/elevator/people")) {
+    //PEOPLE EVENT
     int elevator = msg.get(0).intValue();
     int people = msg.get(1).intValue();
     if (people == 0) {
+      //PEOPLE GOT OFF
       println("Elevator "+elevator+" is empty");
       tree.setPeople(elevator, false);
     } else {
+      //PEOPLE GOT ON
       println("Elevator "+elevator+" is occupied");
       tree.setPeople(elevator, true);
     }
@@ -50,36 +62,33 @@ void setup() {
   size(w, h);
  frame.setBackground(new java.awt.Color(0, 0, 0));
 
-
 //Create the Tree object
   tree = new Tree(width*.5);
   background(0);
 }
 
 void draw() {
-
- // blurCnt++;
-  /*if (blurCnt == blurSpeed) {
-   blurCnt = 0;
-   filter(BLUR, 10);
-   colorMode(HSB);
-   tint(255,100);
-   colorMode(RGB);
-   }*/
+  //UPDATE
   tree.update();
   
+  //FADE EFFECT
   stroke(0);
   fill(0, 50);
   rect(0, 0, width, height);
+  
+  //GET CURRENT TIME, RESET AT 5PM EACH DAY
+  if(hour() == 17){
+    if(minute() == 0){
+      if(second() == 0){
+       tree.reset(); 
+      }
+    }
+  }
 }
 
-/*
-//Change color saturation?
-void sat() {
-  colorMode(HSB);
-  for (int i = 0; i< width*height;i++) {
-    pixels[i] = color(hue(pixels[i]), saturation(pixels[i])-10, brightness(pixels[i]));
+void keyPressed() {
+  if (key == 'r') {
+    //RESET
+    tree.reset(); 
   }
-  colorMode(RGB);
-}*/
-
+}

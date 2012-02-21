@@ -20,6 +20,9 @@ import java.util.regex.*;
 
 public class TranspirationProcessing extends PApplet {
 
+//SETUP VARS
+int numFloors = 27;
+
 String[] events;
 int i = 0;
 int blurSpeed = 1;
@@ -44,17 +47,26 @@ int h = 720;
 //Send messages to tree
 public void oscEvent(OscMessage msg) {
   if (msg.addrPattern().equals("/elevator/floor")) {
+     //FLOOR EVENT
     int elevator = msg.get(0).intValue();
     int floorNumber = msg.get(1).intValue();
     println("Elevator "+elevator+" is now on floor "+floorNumber);
-    tree.setFloor(elevator, floorNumber);
+    //ADD CONTROL FOR BAD ELEVATOR DATA
+    if(floorNumber >= 0 ){
+      if(floorNumber <= numFloors){
+        tree.setFloor(elevator, floorNumber);
+      }
+    }
   } else if (msg.addrPattern().equals("/elevator/people")) {
+    //PEOPLE EVENT
     int elevator = msg.get(0).intValue();
     int people = msg.get(1).intValue();
     if (people == 0) {
+      //PEOPLE GOT OFF
       println("Elevator "+elevator+" is empty");
       tree.setPeople(elevator, false);
     } else {
+      //PEOPLE GOT ON
       println("Elevator "+elevator+" is occupied");
       tree.setPeople(elevator, true);
     }
@@ -72,60 +84,57 @@ public void setup() {
   size(w, h);
  frame.setBackground(new java.awt.Color(0, 0, 0));
 
-
 //Create the Tree object
   tree = new Tree(width*.5f);
   background(0);
 }
 
 public void draw() {
-
- // blurCnt++;
-  /*if (blurCnt == blurSpeed) {
-   blurCnt = 0;
-   filter(BLUR, 10);
-   colorMode(HSB);
-   tint(255,100);
-   colorMode(RGB);
-   }*/
+  //UPDATE
   tree.update();
   
+  //FADE EFFECT
   stroke(0);
   fill(0, 50);
   rect(0, 0, width, height);
+  
+  //GET CURRENT TIME, RESET AT 5PM EACH DAY
+  if(hour() == 17){
+    if(minute() == 0){
+      if(second() == 0){
+       tree.reset(); 
+      }
+    }
+  }
 }
 
-/*
-//Change color saturation?
-void sat() {
-  colorMode(HSB);
-  for (int i = 0; i< width*height;i++) {
-    pixels[i] = color(hue(pixels[i]), saturation(pixels[i])-10, brightness(pixels[i]));
+public void keyPressed() {
+  if (key == 'r') {
+    //RESET
+    tree.reset(); 
   }
-  colorMode(RGB);
-}*/
-
+}
 class Branch {
   //subclass instantiated by Elevator for each floor
   //used to keep track of floor activity, and effect the curlinessof branch fractility
-  // int _len;
-  //float _num;
-  //constructor
 
-  //_len = len;
-  //_num = num;
+  //START BRANCH LENGTH
+  float defaultGrowth = 10;
+  float growthTarget = defaultGrowth;
+  //MAX branch length
+  float growthMax = 11.5f;
+  //GROWTH RATE
+  float growthRate = 1;
+
 
   float curlx = 0; 
   float curly = 0; 
   float f; 
   float deley = 10; 
   float growth = 0; 
-  //START BRANCH LENGTH
-  float growthTarget = 10;
+ 
   int branch, _fl, _cnt;
   float _x, _y, curlLength, _dir;
-  float growthRate = 1;
-  float growthMax = 12;
   int _detail = 2;
   int _c1 = 255;
   int _c2 = 255;
@@ -223,9 +232,6 @@ class Branch {
   }
 
   public void grow() {
- /*  _c1 = 204;
-   _c2 = 153;
-   _c3 = 0;*/
     if (growthTarget < growthMax) {
       growthTarget += growthRate;
       curlLength += growthRate/100;
@@ -241,8 +247,15 @@ class Branch {
     curly -= growthRate/20;
   }
   
+  //SHIVER IN THE WIND
   public void setWind(float wind){
     curlx += wind;
+  }
+  
+  //RESET
+  public void reset(){
+    //RESET BRANCH SIZE
+    growthTarget = defaultGrowth;
   }
 }
 
@@ -359,6 +372,9 @@ public void getOn() {
   _branch.shrink();
 }
 
+public void reset(){
+  _branch.reset(); 
+}
 
 
 }
@@ -435,17 +451,11 @@ class Tree {
     //redraw the trunk 
     int w = 146;
 
-    /* image(trunk, _startX-200, 0, w, height+50);
-     image(trunk, _startX-400, 0, w, height+50);
-     image(trunk, _startX-600, 0, w, height+50);
-     image(trunk, _startX-300, 0, w, height+50);
-     image(trunk, _startX-350, 0, w, height+50);*/
-
     //bg image
     image(_bg, 0, 0,width,height);
+    
     //update the floors
     for (int i=0;i<numFloors;i++) {
-
       float windVariety = random(-.01f, .01f)/10;
       elevatorFloors[i].update(_wind+windVariety);
     }
@@ -474,9 +484,7 @@ class Tree {
   }
 
   public void setPeople(int e, Boolean p) {
-
     int fl = elevators[e-1].getFloor();
-
     if (p) {
       //people got on
       elevatorFloors[fl].getOn();
@@ -487,24 +495,19 @@ class Tree {
   }
 
  public float getFloorY(float fl) {
-    //LINEAR
-   // float y = height - (fl/numFloors * height);
-    
     //EXPONENTIAL
     float y = height - sqrt(fl/numFloors) *height;
-    
-    //LOGARITHMIC
-    // natural logarithm
-/*float exponent = log(fl/numFloors);
-
-// reverse natural logarithm - "antilog"
-float check = pow((float)Math.E, exponent);
-println("pow (E, exponent)  = " + check);
-    
-    float y = height - check *height;*/
-    
     return y;
   }
+  
+  //reset to default values
+  public void reset(){
+    //RESET ALL BRANCHES
+    for (int i=0;i<numFloors;i++) {
+      elevatorFloors[i].reset();
+    }
+  }
+  
 }
 
   static public void main(String args[]) {

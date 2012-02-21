@@ -36,6 +36,9 @@ void getOn() {
   _branch.shrink();
 }
 
+void reset(){
+  _branch.reset(); 
+}
 
 
 }
