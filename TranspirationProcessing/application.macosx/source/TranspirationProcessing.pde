@@ -1,6 +1,5 @@
 //SETUP VARS
 int numFloors = 27;
-
 String[] events;
 int i = 0;
 int blurSpeed = 1;

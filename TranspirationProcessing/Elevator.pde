@@ -1,4 +1,6 @@
 class Elevator {
+  int _maxFloorDifference = 2; // tests to see if floor change is less than this value
+  
   int _currentFloor = 0;
   float _x, _startX, floorY;
   int numFloors = 26;
@@ -37,8 +39,9 @@ class Elevator {
   }
   
   void setFloor(int eFloor) {
+    //TEST FOR FLOOR DIFFERENCE
     if(_hasMoved){
-      if(abs(eFloor - _currentFloor) == 1){
+      if(abs(eFloor - _currentFloor) == _maxFloorDifference){
         _currentFloor = eFloor;
       }
     }
@@ -72,6 +75,10 @@ class Elevator {
   
   boolean getHasMoved(){
     return _hasMoved;  
+  }
+  
+  void setMaxFloorDifference(int m){
+    _maxFloorDifference = m; 
   }
   
 }

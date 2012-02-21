@@ -22,7 +22,6 @@ public class TranspirationProcessing extends PApplet {
 
 //SETUP VARS
 int numFloors = 27;
-
 String[] events;
 int i = 0;
 int blurSpeed = 1;
@@ -260,11 +259,15 @@ class Branch {
 }
 
 class Elevator {
+  int _maxFloorDifference = 2; // tests to see if floor change is less than this value
+  
   int _currentFloor = 0;
   float _x, _startX, floorY;
   int numFloors = 26;
   PImage trunk;
   int ease = 40;
+  
+  boolean _hasMoved = false;
 
   ElevatorFloor[] elevatorFloors = new ElevatorFloor[numFloors];
 
@@ -286,10 +289,6 @@ class Elevator {
   public void update() {
    
     //***DRAW ELEVATOR
-    //create jitter
-  //  println("set floor");
-   // stroke(255,126,0);
-   // fill(25, 50);
     strokeWeight(5);
     float jit = .25f;
     float nextX = _startX;// + random(-jit, jit);
@@ -298,11 +297,18 @@ class Elevator {
     line(_x, floorY, nextX, floorY-15);
     _x = nextX;
   }
-
+  
   public void setFloor(int eFloor) {
-    //if(abs(eFloor - _currentFloor) == 1){
-      _currentFloor = eFloor;
-   // }
+    //TEST FOR FLOOR DIFFERENCE
+    if(_hasMoved){
+      if(abs(eFloor - _currentFloor) == _maxFloorDifference){
+        _currentFloor = eFloor;
+      }
+    }
+    else{
+       _currentFloor = eFloor;
+       _hasMoved = true;
+    }
   }
 
   public void setPeople(Boolean p) {
@@ -317,21 +323,24 @@ class Elevator {
   }
 
   public float getFloorY(float fl) {
-    //LINEAR
-  //  float y = height - (fl/numFloors * height);
     
     //EXPONENTIAL
-    float y = height - sqrt(fl/numFloors) *height;
-    
-    //LOGARITHMIC
-  //  float y = height - log(fl/numFloors) *height;
-    
+    float y = height - sqrt(fl/numFloors) *height;    
     return y;
   }
   
   public int getFloor(){
      return _currentFloor; 
   }
+  
+  public boolean getHasMoved(){
+    return _hasMoved;  
+  }
+  
+  public void setMaxFloorDifference(int m){
+    _maxFloorDifference = m; 
+  }
+  
 }
 
 class ElevatorFloor {
