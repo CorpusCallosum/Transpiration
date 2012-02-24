@@ -7,8 +7,10 @@ class Branch {
   float growthTarget = defaultGrowth;
   //MAX branch length
   float growthMax = 11.5;
+  float growthMin = 0;
+
   //GROWTH RATE
-  float growthRate = 1;
+  float growthRate = .5;
 
 
   float curlx = 0; 
@@ -116,7 +118,8 @@ class Branch {
   }
 
   void grow() {
-    if (growthTarget < growthMax) {
+    println("Branch.grow: "+_fl);
+    if (growthTarget <= growthMax) {
       growthTarget += growthRate;
       curlLength += growthRate/100;
       curlx += growthRate/20;
@@ -125,10 +128,13 @@ class Branch {
   }
 
   void shrink() {
-    growthTarget -= growthRate;
-    curlLength -= growthRate/100;
-    curlx -= growthRate/20;
-    curly -= growthRate/20;
+    println("Branch.shrink: "+_fl);
+    if (growthTarget >= growthMin) {
+      growthTarget -= growthRate;
+      curlLength -= growthRate/100;
+      curlx -= growthRate/20;
+      curly -= growthRate/20;
+    }
   }
   
   //SHIVER IN THE WIND

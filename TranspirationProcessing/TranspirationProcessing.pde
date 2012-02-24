@@ -21,6 +21,8 @@ int h = 720;
 //int w = 1280;
 //int h = 800;
 
+
+
 //Send messages to tree
 void oscEvent(OscMessage msg) {
   if (msg.addrPattern().equals("/elevator/floor")) {
@@ -85,9 +87,40 @@ void draw() {
   }
 }
 
+int e = 0;
+//KEYBOARD CONTROLS FOR TESTING
 void keyPressed() {
+  print(key);
   if (key == 'r') {
     //RESET
     tree.reset(); 
+  }
+  else if(key == '-') {
+    tree.setPeople(e+1, true); 
+  }
+   else if(key == '=') {
+    tree.setPeople(e+1, false); 
+  }
+  else if(key == '1') {
+    e=0;
+  }
+   else if(key == '2') {
+    e=1;
+  }
+  else if(key == '3') {
+    e=2;
+  }
+   else if(key == '4') {
+    e=3;
+  }
+   else if(keyCode == UP) {
+     int f = tree.getElevator(e).getFloor()+1;
+     print(f);
+     tree.setFloor(e+1, f);
+  }
+   else if(keyCode == DOWN) {
+     int f = tree.getElevator(e).getFloor()-1;
+     print(f);
+     tree.setFloor(e+1, f);
   }
 }

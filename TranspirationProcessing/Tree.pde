@@ -84,6 +84,7 @@ class Tree {
   }
 
   void setPeople(int e, Boolean p) {
+    println("Tree.setPeople: "+e+" "+p);
     int fl = elevators[e-1].getFloor();
     if (p) {
       //people got on
@@ -98,6 +99,10 @@ class Tree {
     //EXPONENTIAL
     float y = height - sqrt(fl/numFloors) *height;
     return y;
+  }
+  
+  Elevator getElevator(int e){
+   return elevators[e]; 
   }
   
   //reset to default values

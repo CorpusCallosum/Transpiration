@@ -3,15 +3,13 @@ class Elevator {
   
   int _currentFloor = 0;
   float _x, _startX, floorY;
-  int numFloors = 26;
+  int numFloors = 27;
   PImage trunk;
   int ease = 40;
   
   boolean _hasMoved = false;
 
   ElevatorFloor[] elevatorFloors = new ElevatorFloor[numFloors];
-
-  //Boolean _people = false;
 
   Elevator(float x) {
     println("made an elevator object");
@@ -41,7 +39,7 @@ class Elevator {
   void setFloor(int eFloor) {
     //TEST FOR FLOOR DIFFERENCE
     if(_hasMoved){
-      if(abs(eFloor - _currentFloor) == _maxFloorDifference){
+      if(abs(eFloor - _currentFloor) <= _maxFloorDifference){
         _currentFloor = eFloor;
       }
     }

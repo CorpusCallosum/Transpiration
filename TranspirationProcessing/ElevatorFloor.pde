@@ -16,7 +16,7 @@ class ElevatorFloor {
 void update(float wind) {
     //update the floor
     //draw the branch
-    if(_id > 1){
+    if(_id > 1){//ignor the ground floor and the basement
     _branch.drawBranch();
     _branch.setWind(wind);
     }
