@@ -78,7 +78,8 @@ void draw() {
   rect(0, 0, width, height);
   
   //GET CURRENT TIME, RESET AT 5PM EACH DAY
-  if(hour() == 17){
+ // println("time: "+hour()+":"+minute()+":"+second());
+  if(hour() == 12+5){
     if(minute() == 0){
       if(second() == 0){
        tree.reset(); 

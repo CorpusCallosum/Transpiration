@@ -1,11 +1,12 @@
 class Elevator {
-  int _maxFloorDifference = 2; // tests to see if floor change is less than this value
   
   int _currentFloor = 0;
   float _x, _startX, floorY;
   int numFloors = 27;
   PImage trunk;
   int ease = 40;
+  
+  int _maxFloorDifference = numFloors; // tests to see if floor change is less than this value
   
   boolean _hasMoved = false;
 
